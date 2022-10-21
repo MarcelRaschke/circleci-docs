@@ -4,14 +4,15 @@ title: 通知の使用
 description: Slack、IRC、メール、Web 通知によりCircleCI のジョブステータスを取得する方法を説明します。
 order: 100
 published: true
-version:
-  - クラウド
+contentTags:
+  platform:
+    - クラウド
 ---
 
 * 目次
 {:toc}
 
-CircleCI ではメール通知と Web 通知との連携が可能です。 IRC 通知と Slack 通知も Orb を使って設定することができます。 Slack 通知と Web 通知は、[ワークフロー]({{ site.baseurl }}/ja/2.0/workflows/)の成功時および失敗時に送信されます。 IRC 通知は、ジョブごとに送信されます。 以下に、最小限の CircleCI 設定ファイルの例を示します。
+CircleCI ではメール通知と Web 通知との連携が可能です。 IRC 通知と Slack 通知も Orb を使って設定することができます。 Slack 通知と Web 通知は、[ワークフロー]({{ site.baseurl }}/ja/workflows/)の成功時および失敗時に送信されます。 IRC 通知は、ジョブごとに送信されます。 以下に、最小限の CircleCI 設定ファイルの例を示します。
 
 ```yaml
 version: 2.1
@@ -127,7 +128,7 @@ workflows:
           context: slack-secrets
 ```
 
-[Slack Orb の使用]({{ site.baseurl }}/ja/2.0/slack-orb-tutorial/)で、サンプルを使ったフルチュートリアルを参照してください。
+[Slack Orb の使用]({{ site.baseurl }}/ja/slack-orb-tutorial/)で、サンプルを使ったフルチュートリアルを参照してください。
 
 CircleCI の Slack Orb は、承認待ちについての Slackチャネルへの通知など、様々な種類の通知にも使用できます。 こうした使用例については、[CircleCI の Slack Orb のページ](https://circleci.com/developer/ja/orbs/orb/circleci/slack)を参照してください。
 
@@ -165,5 +166,5 @@ workflows:
 
 ## 関連項目
 
-- [Orb の概要]({{ site.baseurl }}/ja/2.0/orb-intro/)
-- [Slack Orb の使用]({{ site.baseurl }}/ja/2.0/slack-orb-tutorial/)
+- [Orb の概要]({{ site.baseurl }}/ja/orb-intro/)
+- [Slack Orb の使用]({{ site.baseurl }}/ja/slack-orb-tutorial/)

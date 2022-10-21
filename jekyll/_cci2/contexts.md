@@ -4,22 +4,20 @@ title: "Using Contexts"
 short-title: "Using Contexts"
 description: "Secured, cross-project resources"
 order: 41
-version:
-- Cloud
-- Server v3.x
-- Server v2.x
+contentTags: 
+  platform:
+  - Cloud
+  - Server v4.x
+  - Server v3.x
+  - Server v2.x
 ---
 
-Contexts provide a mechanism for securing and sharing environment variables across projects. The environment variables are defined as name/value pairs and are injected at runtime. This document describes creating and using contexts in CircleCI in the following sections:
-
-* TOC
-{:toc}
+Contexts provide a mechanism for securing and sharing environment variables across projects. The environment variables are defined as name/value pairs and are injected at runtime. This document describes creating and using contexts in CircleCI.
 
 ## Overview
 {: #overview }
-{:.no_toc}
 
-Create and manage contexts on the Organization Settings page of the CircleCI application. You must be an organization member to view, create, or edit contexts. After a context has been created, you can use the `context` key in the workflows section of a project [`config.yml`]({{ site.baseurl }}/2.0/configuration-reference/#context) file to give any job(s) access to the environment variables associated with the context, as shown in the image below.
+You can create and manage contexts on the **Organization Settings** page of the [CircleCI web app](https://app.circleci.com). You must be an organization member to view, create, or edit contexts. After a context has been created, you can use the `context` key in the workflows section of a project [`config.yml`]({{ site.baseurl }}/configuration-reference/#context) file to give any job(s) access to the environment variables associated with the context, as shown in the image below.
 
 {:.tab.contextsimage.Cloud}
 ![Contexts Overview]({{ site.baseurl }}/assets/img/docs/contexts_cloud.png)
@@ -69,7 +67,7 @@ If you find you need to rename an org or repo that you have previously hooked up
 
 3. Click the Add Environment Variable button and enter the variable name and value you wish to associate with this context. Click the Add Variable button to save.
 
-4. Add the `context` key to the [`workflows`]({{ site.baseurl }}/2.0/configuration-reference/#workflows) section of your [`config.yml`]({{ site.baseurl }}/2.0/configuration-reference/) file for every job in which you want to use the variable. In the following example, the `run-tests` job will have access to the variables set in the `org-global` context. CircleCI Cloud users can specify multiple contexts, so in this example `run-tests` will also have access to variables set in the context called `my-context`.
+4. Add the `context` key to the [`workflows`]({{ site.baseurl }}/configuration-reference/#workflows) section of your [`config.yml`]({{ site.baseurl }}/configuration-reference/) file for every job in which you want to use the variable. In the following example, the `run-tests` job will have access to the variables set in the `org-global` context. CircleCI Cloud users can specify multiple contexts, so in this example `run-tests` will also have access to variables set in the context called `my-context`.
 
 {:.tab.contexts.Cloud}
 ```yaml
@@ -210,7 +208,7 @@ Administrators of CircleCI server installations can find the **Refresh Permissio
 {: #approving-jobs-that-use-restricted-contexts }
 {:.no_toc}
 
-Adding an [approval job]({{ site.baseurl }}/2.0/configuration-reference/#type) to a workflow gives the option to require manual approval of the use of a restricted context. To restrict running of jobs that are downstream from an approval job, add a restricted context to those downstream jobs, as shown in the example below:
+Adding an [approval job]({{ site.baseurl }}/configuration-reference/#type) to a workflow gives the option to require manual approval of the use of a restricted context. To restrict running of jobs that are downstream from an approval job, add a restricted context to those downstream jobs, as shown in the example below:
 
 {:.tab.approvingcontexts.Cloud}
 ```yaml
@@ -292,10 +290,56 @@ workflows:
 
 In this example, the jobs `test` and `deploy` are restricted, and `deploy` will only run if the user who approves the `hold` job is a member of the security group assigned to the context and `deploy-key-restricted-context`. When the workflow `build-test-deploy` runs, the jobs `build` and `test` will run, then the `hold` job, which presents a manual approval button in the CircleCI application. This approval job may be approved by _any_ member of the project, but the `deploy` job will fail as `unauthorized` if the "approver" is not part of the restricted context security group.
 
+## Project restrictions
+{: #project-restrictions }
+
+CircleCI enables you to restrict secret environment variables by adding project restrictions to contexts. Currently, **this feature is only enabled for standalone projects that are not tied to a VCS. Standalone projects are only available at this time with a [GitLab integration]({{site.baseurl}}/gitlab-integration) with CircleCI.** A standalone organization allows for managing users and projects independent of the VCS.
+
+Only [organization admins]({{site.baseurl}}/gitlab-integration#about-roles-and-permissions) may add or remove project restrictions to a new or existing context. After a project restriction is added to a context, only workflows associated with the specified project(s) will have access to the context and its environment variables.
+
+Organization Admins have read/write access to all projects, and have unrestricted access to all contexts.
+
+### Running workflows with a project restricted context
+{: #running-workflows-with-a-project-restricted-context }
+
+To invoke a workflow that uses a restricted context, the workflow must be part of the project the context is restricted to. If the workflow does not have access to the context, the workflow will fail with the `Unauthorized` status.
+
+### Restrict a context to a project
+{: #restrict-a-context-to-a-project }
+
+You must be an **organization admin** to restrict a context though the method detailed below.
+
+. Navigate to the **Organization Settings > Contexts** page of your GitLab organization in the [CircleCI web app](https://app.circleci.com/). The list of contexts will be visible.
+
+1. Select the name of an existing context, or click the **Create Context** button if you want to use a new context.
+
+1. Click the **Add Project Restriction** button to view the dialog box.
+
+1. Select the project name to add to the context, and click the **Add** button. Use of the context is now limited to the specified project. Currently, multiple projects must be added individually.
+
+1. You should now see a list of the defined project restrictions on the context page.
+
+1. If you have environment variables, they should appear on the page. If there are none, you can click **Add Environment Variables** to add them to the context. Then click the **Add** button to finish. Use of the environment variables for this context is now limited to the specified projects.
+
+Only workflows under the specified projects may now use the context and its environment variables.
+
+### Removing project restrictions from contexts
+{: #removing-project-restrictions-from-contexts }
+
+You must be an **organization admin** to remove groups from contexts though the method detailed below.
+
+1. Navigate to **Organization Settings > Contexts** page in the [CircleCI web app](https://app.circleci.com/). The list of contexts will be visible.
+
+1. Select the name of the existing context for which you would like to modify restrictions.
+
+1. Click the **X** button next to the project restriction you would like to remove. The project restriction will be removed for the context.
+
+1. If there are no longer any project restrictions for the context, the context and its environment variables are now effectively unrestricted.
+
 ## Removing groups from contexts
 {: #removing-groups-from-contexts }
 
-To make a context available only to the administrators of the organization, you may remove all of the groups associated with a context. All other users will lose access to that context.
+To make a context available _only_ to the administrators of the organization, you may remove all of the groups associated with a context. All other users will lose access to that context.
 
 ## Adding and removing users from teams and groups
 {: #adding-and-removing-users-from-teams-and-groups }
@@ -318,20 +362,49 @@ If the context is restricted with a group other than `All members`, you must be 
 
 3. Type Delete and click Confirm. The Context and all associated environment variables will be deleted. **Note:** If the context was being used by a job in a Workflow, the job will start to fail and show an error.
 
+## Context management with the CLI
+{: #context-management-with-the-cli}
+
+While contexts can be managed on the CircleCI web application, the [CircleCI CLI](https://circleci-public.github.io/circleci-cli/) provides an alternative method for managing the usage of contexts in your projects. With the CLI, you can execute several context-oriented commands:
+
+- `create` - Create a new context
+- `delete` - Delete the named context
+- `list` - List all contexts
+- `remove-secret` - Remove an environment variable from the named context
+- `show` - Show a context
+- `store-secret` - Store a new environment variable in the named context
+
+The above list are "sub-commands" in the CLI, which would be executed like so:
+
+```shell
+circleci context create
+
+# Returns the following:
+List all contexts
+
+Usage:
+  circleci context list <vcs-type> <org-name> [flags]
+```
+
+Many commands will require that you include additional information as indicated by the parameters delimited by `< >`.
+
+As with most of the CLI's commands, you will need to have properly [configure the CLI]({{site.baseurl}}/local-cli#configuring-the-cli) with a token to enable performing context related actions.
+
+Some use cases for the CLI are described below in the [Enironment variable usage](#environment-variable-usage) section.
+
 ## Environment variable usage
 {: #environment-variable-usage }
 
 Environment variables are used according to a specific precedence order, as follows:
 
-1. Environment variables declared [inside a shell command]({{ site.baseurl }}/2.0/env-vars/#setting-an-environment-variable-in-a-shell-command) in a `run` step, for example `FOO=bar make install`.
-2. Environment variables declared with the `environment` key [for a `run` step]({{ site.baseurl }}/2.0/env-vars/#setting-an-environment-variable-in-a-step).
-3. Environment variables set with the `environment` key [for a job]({{ site.baseurl }}/2.0/env-vars/#setting-an-environment-variable-in-a-job).
-4. Special CircleCI environment variables defined in the [CircleCI Built-in Environment Variables]({{ site.baseurl }}/2.0/env-vars/#built-in-environment-variables) section of this document.
+1. Environment variables declared [inside a shell command]({{ site.baseurl }}/set-environment-variable/#set-an-environment-variable-in-a-shell-command) in a `run` step, for example `FOO=bar make install`.
+2. Environment variables declared with the `environment` key [for a `run` step]({{ site.baseurl }}/set-environment-variable/#set-an-environment-variable-in-a-step).
+3. Environment variables set with the `environment` key [for a job]({{ site.baseurl }}/set-environment-variable/#set-an-environment-variable-in-a-job).
+4. Special CircleCI environment variables defined in the [CircleCI built-in environment variables]({{ site.baseurl }}/built-in-environment-variables) documentation.
 5. Context environment variables (assuming the user has access to the Context).
-6. [Project-level environment variables]({{ site.baseurl }}/2.0/env-vars/#setting-an-environment-variable-in-a-project) set on the Project Settings page.
+6. [Project-level environment variables]({{ site.baseurl }}/set-environment-variable/#set-an-environment-variable-in-a-project) set on the Project Settings page.
 
 Environment variables declared inside a shell command `run step`, for example `FOO=bar make install`, will override environment variables declared with the `environment` and `contexts` keys. Environment variables added on the Contexts page will take precedence over variables added on the Project Settings page.
-
 
 ### Secure Environment Variable Creation, Deletion, and Rotation
 {: #secure-environment-variable-creation-deletion-and-rotation }
@@ -343,10 +416,9 @@ This section will walk through interacting with context environment variables us
 
 ##### Using CircleCI’s CLI
 {: #using-circlecis-cli }
-{:.no_toc}
 
 _If this is your first time using the CLI, follow the instructions on
-[CircleCI CLI Configuration]({{site.baseurl}}/2.0/local-cli/?section=configuration)
+[CircleCI CLI Configuration]({{site.baseurl}}/local-cli/?section=configuration)
 to set up your CircleCI command line interface._
 
 To create an environment variable using our CLI, perform the following steps:
@@ -418,7 +490,7 @@ directly accessing the API.
 {:.no_toc}
 
 _If this is your first time using the CLI, follow the instructions on
-[CircleCI CLI Configuration]({{site.baseurl}}/2.0/local-cli/?section=configuration)
+[CircleCI CLI Configuration]({{site.baseurl}}/local-cli/?section=configuration)
 to set up your CircleCI command line interface._
 
 To rotate an environment variable using the CLI, perform the following steps:
@@ -460,11 +532,11 @@ The value of the context will not be masked in the build output if:
 * the value is less than 4 characters
 * the value is equal to one of `true`, `True`, `false` or `False`
 
-**Note:** Secrets Masking will only prevent the value of the environment variable from appearing in your build output. If your secrets appear elsewhere, such as test results or artifacts, they will not be masked. In addition, the value of the environment variable is still accessible to users [debugging builds with SSH]({{ site.baseurl }}/2.0/ssh-access-jobs).
+**Note:** Secrets Masking will only prevent the value of the environment variable from appearing in your build output. If your secrets appear elsewhere, such as test results or artifacts, they will not be masked. In addition, the value of the environment variable is still accessible to users [debugging builds with SSH]({{ site.baseurl }}/ssh-access-jobs).
 
 ## See also
 {: #see-also }
 {:.no_toc}
 
-* [CircleCI Environment Variable Descriptions]({{ site.baseurl }}/2.0/env-vars/)
-* [Workflows]({{ site.baseurl }}/2.0/workflows/)
+* [Environment variables]({{ site.baseurl }}/env-vars/)
+* [Workflows]({{ site.baseurl }}/workflows/)

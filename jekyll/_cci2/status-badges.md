@@ -2,10 +2,12 @@
 layout: classic-docs
 title: Adding Status Badges
 description: How to embed a CircleCI status badge in any web page or document
-version:
-- Cloud
-- Server v3.x
-- Server v2.x
+contentTags: 
+  platform:
+  - Cloud
+  - Server v4.x
+  - Server v3.x
+  - Server v2.x
 ---
 
 This document describes how to create a badge that displays your project's build status (passed or failed) in a README or other document.
@@ -33,7 +35,7 @@ To generate your own status badge, you will need to know, and substitute, the fo
 
 - `<PROJECT_NAME>` - Your project's name. Example: `circleci-docs`
 - `<ORG_NAME>` - The organization or user name the project in question belongs to
-- `<VCS>` - your VCS provider (`gh` for "github" and `bb` for BitBucket)
+- `<VCS>` - your VCS provider (`gh` for "github" and `bb` for Bitbucket)
 - `<LINK>` - The link you want the status badge to go to when clicked (example: the pipeline overview page)
 - Optional: an API token (to create badges for private projects)
 
@@ -142,4 +144,4 @@ If you find the default status badge too minimal, you can use the [shield style]
 ## See also
 {: #see-also }
 
-* [Status]({{site.baseurl}}/2.0/status/)
+* [Status]({{site.baseurl}}/status/)

@@ -1,9 +1,12 @@
 ---
 
-version:
-- クラウド
-- Server v3.x
-- Server v2.x
+redirect_from: /ja/configuration-cookbook/
+contentTags:
+  platform:
+  - クラウド
+  - Server v4.x
+  - Server v3.x
+  - Server v2.x
 ---
 = 設定ファイルの概要
 :page-layout: classic-docs
@@ -17,6 +20,7 @@ version:
 
 toc::[]
 
+[#getting-started-with-circleci-config]
 == CircleCI 設定ファイル入門
 
 このガイドでは、以下のトピックについて説明します。
@@ -31,6 +35,7 @@ toc::[]
 
 CircleCI は *Configuration as Code* を貫いています。 その結果として、ビルドからデプロイまでのデリバリープロセス全体が `config.yml` という 1 つのファイルを通じてオーケストレーションされます。 `config.yml` ファイルは、リポジトリプロジェクトの最上部にある `.circleci` というフォルダーに置かれます。 CircleCI の設定には YAML 構文が使われます。 その基本的な内容については、 <<writing-yaml#,YAML の記述>> を参照してください。
 
+[#part-1-using-the-shell]
 == パート 1: シェルの使用
 
 CircleCI では、オンデマンドのシェルによりコマンドを実行します。 パート 1 では、ビルドをセットアップし、シェルコマンドを実行します。
@@ -46,6 +51,9 @@ jobs:
   build:
     docker:
       - image: alpine:3.15
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - run:
           name: The First Step
@@ -55,18 +63,20 @@ jobs:
 ----
 +
 上記サンプルコードの各行について、以下で解説します。
+
 * *1 行目:* 使用している CircleCI プラットフォームのバージョンを示します。 `2.1` が最新のバージョンです。
-* *2 行目:* `jobs` レベルには、子ジョブのコレクションが含まれ、ジョブを表しています。 これらのジョブの名前を指定します (_build_、_test_、_deploy_ など)
-。
+* *2 行目:* `jobs` レベルには、子ジョブのコレクションが含まれ、ジョブを表しています。 これらのジョブの名前を指定します (_build_、_test_、_deploy_ など)。
 * *3 行目:* `build` は、`jobs` コレクションの最初の子ジョブです。 このサンプルでは、`build` は唯一のジョブでもあります。
 * *4 行目:* これは、ジョブのコマンドが実行されるコンテナに対し Docker イメージを使用していることを示します。
 * *5 行目:* これが Docker イメージです。 このサンプルでは、Alpine Linux に基づいたミニマムイメージである `alpine:3.15` を示します。
-* *6 行目:* `steps` コレクションは、`run` ディレクティブのリストです。
-* *7 行目:* 各 `run` ディレクティブは、宣言された順に実行されます。
-* *8 行目:* `name` 属性は、警告、エラー、出力などを返す際に関連情報を提供します。 `name` は、ビルドプロセス内のアクションとしてわかりやすいものにする必要があります。
-* *9 行目:* `command` 属性は、実行するシェルコマンドのリストです。 最初のパイプ `|` は、複数行のシェルコマンドがあることを示します。
-* *10 行目:* ビルドシェルに `Hello World!` を出力します。
-* *11 行目:* `This is the delivery pipeline` と出力します。
+* *6-8 行目:* Docker レジストリの認証情報を記載します。 この部分はオプションです。 詳細は、 link:/docs/private-images[Docker の認証付きプルの使用] を参照して下さい。
+* *9 行目:* `steps` コレクションは、`run` ディレクティブのリストです。
+* *10 行目:* 各 `run` ディレクティブは、宣言された順に実行されます。
+* *11 行目:* `name` 属性は、警告、エラー、出力などを返す際に関連情報を提供します。 `name` は、ビルドプロセス内のアクションとしてわかりやすいものにする必要があります。
+* *12 行目:* `command` 属性は、実行するシェルコマンドのリストです。 最初のパイプ `|` は、複数行のシェルコマンドがあることを示します。
+* *13 行目:* ビルドシェルに `Hello World!` を出力します。
+* *14 行目:* `This is the delivery pipeline` と出力します。
+
 . `config.yml` ファイルをコミット (リモートで作業している場合は、コミット後にプッシュ) します。
 . CircleCI の Projects ページで、 プロジェクトを検索し、横にある青色の *Set Up Project* ボタンをクリックします。
 +
@@ -86,6 +96,7 @@ image:config-first-step.png[ジョブの成功ステップ]
 
 NOTE: `config.yml` の構文そのものは簡単ですが、インデントは複雑です。 そのため、インデントの誤りが最も一般的なエラーとなっています。 この例で問題が発生した場合は、インデントを注意して確認するか、サンプルコードをコピー & ペーストしてください。
 
+[#part-2-using-code-from-your-repo]
 == パート 2: リポジトリのコードの使用
 
 複雑なアクションを簡素化するため、CircleCI は複数のコマンドを提供しています。 ここでの例では、`checkout` コマンドを使用します。 このコマンドは、Git リポジトリからコードをフェッチします。 このコードを取得すると、その後のステップで使用して作業できます。
@@ -107,6 +118,9 @@ jobs:
   build:
     docker:
       - image: cimg/base:2021.04
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - run:
@@ -124,8 +138,8 @@ jobs:
 この 2 つの小さな変更により、設定ファイルの機能が著しく向上します。
 
 * *5 行目:*  この行は、Git をサポートする Docker イメージを示します。 `cimg/base:2021.04` は、基本的なジョブを実行する Ubuntu ベースの小さなイメージです。
-* *7 行目:* `checkout` コマンドは、Git リポジトリからコードをフェッチします。
-* *13-17 行目:* `build` ジョブのこの 2 つ目のステップは、すでにチェックアウトされているリポジトリの内容を、(`ls -al` を使用して) リストします。 これで、このリポジトリでさらに多くのアクションを実行できます。
+* *10 行目:* `checkout` コマンドは、Git リポジトリからコードをフェッチします。
+* *16-20 行目:* `build` ジョブのこの 2 つ目のステップは、すでにチェックアウトされているリポジトリの内容を、(`ls -al` を使用して) リストします。 これで、このリポジトリでさらに多くのアクションを実行できます。
 
 前回と同じように、更新した `config.yml` ファイルをコミットし、プッシュします。
 
@@ -136,6 +150,7 @@ CircleCI ダッシュボードには、その他のステップも表示され�
 
 image::config-second-step.png[Checking out your repo]
 
+[#part-3-using-different-environments-and-creating-workflows]
 == パート 3: さまざまな環境の使用とワークフローの作成
 
 パート 1 と パート 2 では、Linux ベースの基本的な Docker コンテナでジョブを実行しました。
@@ -154,6 +169,9 @@ jobs:
   Hello-World:
     docker:
       - image: cimg/base:2021.04
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - run:
           name: Saying Hello
@@ -164,6 +182,9 @@ jobs:
   Fetch-Code:
     docker:
       - image: cimg/base:2021.04
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - run:
@@ -175,6 +196,9 @@ jobs:
   Using-Node:
     docker:
       - image: cimg/node:17.2
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - run:
           name: Running the Node Container
@@ -197,17 +221,17 @@ workflows:
 上記サンプルコードの各行について、以下で解説します。
 
 * *3 行目:* # (ハッシュ) 記号をコメントの前に置くことにより、config.yml ファイルにコメントを追加できます。
-* *5-12 行目:* 最初のジョブは _Hello-World_ です。 パート 1 でのように、基本的なイメージ内で 2 つのコマンドを実行します。
-* *14 行目:*  2 つ目のジョブは _Fetch-Code_ です。 これは、_Hello-World_job に合わせてインデントされます。
-* *15-16 行目:* _Fetch-Code_ ジョブは、Git 互換の基本的なイメージを使用します。
-* *17-22 行目:* このコードはパート 2 から繰り返されていますが、ここでは別個のジョブです。
-* *24 行目:* 3 つ目のジョブは _Using-Node_ です。
-* *25-26 行目:* この _Using-Node_ ジョブは、`cimg/node:17.2` という Docker イメージを使用します。 このイメージには、ブラウザーと他の便利なツールと共に、Node の バージョン 17.2 が含まれています。
-* *27-31 行目:* これまでのジョブ同様に、_run_ ステップがあります。 ここでは、コマンド `node -v` がコンテナで実行する Node のバージョンを出力します。
-* *32-33 行目:* この行は、_Example-Workflow_ というワークフローを作成します。 ワークフローは、ジョブのリストとその実行順を定義します。
-* *34-35 行目:* これらの行は最初のジョブである _Hello-World_ を指定します。
-* *36-38 行目:* _Fetch-Code_ ジョブ用の構文は少し異なります。 ジョブ名の後ろにはコロンが続き、その後ろに _requires_ ステートメントが続きます。 この行は、_Fetch-Code_ ジョブを実行する前に、_Hello-World_ ジョブを正常に実行する必要があることを示します。
-* *39-41 行目:* 最初のジョブは _Using-Node_ です。 上記と同様に、このジョブもその前のジョブ、 _Fetch-Code_ が正常に完了している必要があります。
+* *4-15 行目:* 最初のジョブは _Hello-World_ です。 パート 1 でのように、基本的なイメージ内で 2 つのコマンドを実行します。
+* *17 行目:*  2 つ目のジョブは _Fetch-Code_ です。 これは、_Hello-World_job に合わせてインデントされます。
+* *18-19 行目:* _Fetch-Code_ ジョブは、Git 互換の基本的なイメージを使用します。
+* *23-29 行目:* このコードはパート 2 から繰り返されていますが、ここでは別個のジョブです。
+* *31 行目:* 3 つ目のジョブは _Using-Node_ です。
+* *32-33 行目:* この _Using-Node_ ジョブは、`cimg/node:17.2` という Docker イメージを使用します。 このイメージには、ブラウザーと他の便利なツールと共に、Node の バージョン 17.2 が含まれています。
+* *37-41 行目:* これまでのジョブ同様に、_run_ ステップがあります。 ここでは、コマンド `node -v` がコンテナで実行する Node のバージョンを出力します。
+* *42-43 行目:* この行は、_Example-Workflow_ というワークフローを作成します。 ワークフローは、ジョブのリストとその実行順を定義します。
+* *44-45 行目:* これらの行は最初のジョブである _Hello-World_ を指定します。
+* *46-48 行目:* _Fetch-Code_ ジョブ用の構文は少し異なります。 ジョブ名の後ろには `requires:` が続き、その後ろに _requires_ ステートメントが続きます。 この行は、_Fetch-Code_ ジョブを実行する前に、_Hello-World_ ジョブを正常に実行する必要があることを示します。
+* *49-51 行目:* 最初のジョブは _Using-Node_ です。 上記と同様に、このジョブもその前のジョブ、 _Fetch-Code_ が正常に完了している必要があります。
 
 前回と同じように、更新した `config.yml` ファイルをコミットし、プッシュします。
 
@@ -228,6 +252,7 @@ image::config-node-job.png[Running Node job]
 
 TIP: さらに理解を深めるために、 他の <<circleci-images#,CircleCI イメージ>> を試すか、ワークフローにジョブをもう少し追加することをお勧めします。
 
+[#part-4-adding-a-manual-approval]
 == パート 4: 手動による承認の追加
 
 CircleCI のワークフローモデルは、先行ジョブのオーケストレーションに基づいています。 パート 3 で説明したように、`requires` ステートメントはその前のジョブが正常に実行された場合にのみ、ジョブを実行するように指定しています。
@@ -246,6 +271,9 @@ jobs:
   Hello-World:
     docker:
       - image: alpine:3.15
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - run:
           name: Saying Hello
@@ -256,6 +284,9 @@ jobs:
   Fetch-Code:
     docker:
       - image: cimg/base:2021.04
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - run:
@@ -267,6 +298,9 @@ jobs:
   Using-Node:
     docker:
       - image: cimg/node:17.2
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - run:
           name: Running the Node Container
@@ -275,6 +309,9 @@ jobs:
   Now-Complete:
     docker:
       - image: alpine:3.15
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - run:
           name: Approval Complete
@@ -303,8 +340,8 @@ workflows:
 
 このコードの多くは今後何度も登場します。 重要な追加事項がいくつかあります。
 
-* *45-49 行目:* これにより、_Hold-for-Approval_ という新しいジョブが作成されます。 `type` で _approval_ と指定されています。そのため、CircleCI でこのジョブを手動で承認することが求められます。 これは、それまでのジョブが期待どおりに実行されたかどうかを確認する場合に便利です。 例えば、Web サイトを公開する前にテストサーバー上で正常に見えるかどうかを確認できます。 または、高コストのジョブを実行する前に、人間による確認を行いたい場合などです。
-* *50-52 行目:* この最後のジョブ _Now-Complete_ は、_Hold-for-Approval_ が正常に完了していることを前提とし、CircleCI でその前のジョブを承認した場合にのみ実行されます。
+* *64-68 行目:* これにより、_Hold-for-Approval_ という新しいジョブが作成されます。 `type` で _approval_ と指定されています。そのため、CircleCI でこのジョブを手動で承認することが求められます。 これは、それまでのジョブが期待どおりに実行されたかどうかを確認する場合に便利です。 例えば、Web サイトを公開する前にテストサーバー上で正常に見えるかどうかを確認できます。 または、高コストのジョブを実行する前に、人間による確認を行いたい場合などです。
+* *69-71 行目:* この最後のジョブ _Now-Complete_ は、_Hold-for-Approval_ が正常に完了していることを前提とし、CircleCI でその前のジョブを承認した場合にのみ実行されます。
 
 これまでのように、更新した `config.yml` ファイルをコミットし、プッシュします。
 
@@ -329,6 +366,7 @@ TIP: エラーの場合、問題は誤ったインデントにより引き起こ
 
 上記で習得した内容を活用すると、強力なパイプラインを作成することができます。
 
+[#see-also]
 == 関連項目
 
 * <<configuration-reference#,CircleCI の設定>>

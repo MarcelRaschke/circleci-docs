@@ -5,20 +5,16 @@ short-title: "Using Shell Scripts"
 description: "Best practices for using shell scripts for use in CircleCI configuration"
 categories: [getting-started]
 order: 10
-version:
-- Cloud
-- Server v3.x
-- Server v2.x
+contentTags: 
+  platform:
+  - Cloud
+  - Server v4.x
+  - Server v3.x
+  - Server v2.x
 ---
-
-This document describes best practices for using shell scripts in your [CircleCI configuration]({{ site.baseurl }}/2.0/configuration-reference/) in the following sections:
-
-* TOC
-{:toc}
 
 ## Overview
 {: #overview }
-{:.no_toc}
 
 Configuring CircleCI often requires writing shell scripts. While shell scripting can grant finer control over your build, it is a subtle art that can produce equally subtle errors. You can avoid many of these errors by reviewing the best practices explained below.
 

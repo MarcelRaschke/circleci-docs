@@ -5,9 +5,11 @@ short-title: "Orbs Introduction"
 description: "Starting point for CircleCI Orbs"
 categories: [getting-started]
 order: 1
-version:
-- Cloud
-- Server v3.x
+contentTags: 
+  platform:
+  - Cloud
+  - Server v4.x
+  - Server v3.x
 ---
 
 * TOC
@@ -15,11 +17,11 @@ version:
 
 Orbs are reusable snippets of code that help automate repeated processes, accelerate project setup, and make it easy to integrate with third-party tools. Visit the [Orbs Registry](https://circleci.com/developer/orbs) on the CircleCI Developer Hub to search for orbs to help simplify your configuration.
 
-Examples of reusable snippets that can be included in orbs are [jobs]({{site.baseurl}}/2.0/reusing-config/#authoring-parameterized-jobs), [commands]({{site.baseurl}}/2.0/reusing-config/#authoring-reusable-commands), [executors]({{site.baseurl}}/2.0/reusing-config/#executor), as well as Node.js and its package managers.
+Examples of reusable snippets that can be included in orbs are [jobs]({{site.baseurl}}/reusing-config/#authoring-parameterized-jobs), [commands]({{site.baseurl}}/reusing-config/#authoring-reusable-commands), [executors]({{site.baseurl}}/reusing-config/#executor), as well as Node.js and its package managers.
 
 Use orbs to reduce configuration complexity, and help you integrate with your software and services stack quickly and easily across many projects.
 
-If you would like to author your own orb, read more on the [Introduction to Authoring Orbs]({{site.baseurl}}/2.0/orb-author-intro/) page.
+If you would like to author your own orb, read more on the [Introduction to Authoring Orbs]({{site.baseurl}}/orb-author-intro/) page.
 
 ## Benefits of using orbs
 {: #benefits-of-using-orbs }
@@ -79,7 +81,7 @@ workflows:
 ## The orb registry
 {: #the-orb-registry }
 
-The [Orb Registry](https://circleci.com/developer/orbs) is an open repository of all published orbs. Find the orb for your stack or consider developing and [publishing your own orb]({{site.baseurl}}/2.0/orb-author-intro/).
+The [Orb Registry](https://circleci.com/developer/orbs) is an open repository of all published orbs. Find the orb for your stack or consider developing and [publishing your own orb]({{site.baseurl}}/orb-author-intro/).
 
 ![Orb Registry]({{site.baseurl}}/assets/img/docs/orbs-registry.png)
 
@@ -104,11 +106,11 @@ Orbs can be published in one of two ways:
 * **Publicly**: Searchable in the orb registry, and available for anyone to use 
 * **Privately**: Only available to use within your organization, and only findable in the registry with a direct URL and when authenticated 
 
-To understand these concepts further read the [Public Orbs vs Private Orbs]({{site.baseurl}}/2.0/orb-concepts/#private-orbs-vs-public-orbs) section of the Orb Concepts page.
+To understand these concepts further read the [Public Orbs vs Private Orbs]({{site.baseurl}}/orb-concepts/#private-orbs-vs-public-orbs) section of the Orb Concepts page.
 
 ## Identifying orbs
 {: #identifying-orbs }
-An orb is identified by its _slug_ which contains the _namespace_ and _orb name_. A namespace is a unique identifier referring to the organization authoring a set of orbs. The orb name will be followed be an `@` symbol and a [semantic version]({{site.baseurl}}/2.0/orb-concepts/#semantic-versioning) string, identifying which version of the orb is being used.
+An orb is identified by its _slug_ which contains the _namespace_ and _orb name_. A namespace is a unique identifier referring to the organization authoring a set of orbs. The orb name will be followed by an `@` symbol and a [semantic version]({{site.baseurl}}/orb-concepts/#semantic-versioning) string, identifying which version of the orb is being used.
 
 Example orb slug: `<namespace>/<orb-name>@1.2.3`
 
@@ -126,13 +128,13 @@ orbs:
   orb-name: <namespace>/<orb-name>@1.2.3
 ```
 
-After the orb has been imported into the configuration file, the elements provided by the orb are available as `<orb-name>/<element>`. Orb elements can be used in the same way as [reusable configuration]({{site.baseurl}}/2.0/reusing-config/) elements. The Node example below shows how to use an orb command.
+After the orb has been imported into the configuration file, the elements provided by the orb are available as `<orb-name>/<element>`. Orb elements can be used in the same way as [reusable configuration]({{site.baseurl}}/reusing-config/) elements. The Node example below shows how to use an orb command.
 
 ### Node example
 {: #node-example }
 {:.no_toc}
 
-The Node orb provides a command, [`install-packages`](https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages), to install your node packages, automatically enable caching, and provide additional options through the use of parameters. To use the `install-packages` command, reference it in a job's [steps]({{site.baseurl}}/2.0/configuration-reference/#steps).
+The Node orb provides a command, [`install-packages`](https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages), to install your node packages, automatically enable caching, and provide additional options through the use of parameters. To use the `install-packages` command, reference it in a job's [steps]({{site.baseurl}}/configuration-reference/#steps).
 
 ```yaml
 version: 2.1
@@ -155,21 +157,31 @@ jobs:
 ## Orbs page in the CircleCI app
 {: #orbs-view}
 
-The Orbs page gives users visibility into the orbs their organization has created. Users can review the orb type (public or private), orb usage (how many times the orb is used across all configurations), latest version, and description directly from the list view on the page.
+The orbs page in the CircleCI web app is not currently available on CircleCI server.
+{: class="alert alert-warning"}
 
-To access the Orbs page, navigate to Organization Settings in the app.
+To access the orbs page in the web app, navigate to **Organization Settings** and select **Orbs** from the sidebar.
 
-Full orb details, including orb source, are accessible by clicking on the orb name. The orb details page is similar to the CircleCI Orb Registry in that the details page provides the orb's contents, commands, and usage examples. Note: Private orb details pages may only be viewed by logged-in members of your organization. Unpublished orbs will not have linked details pages.
+The orbs page lists orbs created within your organization. You can view: 
+
+* Orb type (public or private)
+* Orb usage (how many times the orb is used across all configurations) 
+* Latest version
+* Description
+
+Full orb details, including orb source, are accessible by clicking on the orb name. The orb details page is similar to the CircleCI orb registry in that the details page provides the orb's contents, commands, and usage examples. 
+
+Private orb details pages may only be viewed by logged-in members of your organization. Unpublished orbs will not have linked details pages.
+{: class="alert alert-info"}
 
 
 ## See also
 {: #see-also }
-{:.no_toc}
 
-- Refer to [Orbs Concepts]({{site.baseurl}}/2.0/orb-concepts/) for high-level information about CircleCI orbs.
-- Refer to [Orbs FAQ]({{site.baseurl}}/2.0/orbs-faq/) for information on known issues and questions that have been addressed when using CircleCI orbs.
-- Refer to [Reusable Configuration Reference]({{site.baseurl}}/2.0/reusing-config/) for examples of reusable orbs, commands, parameters, and executors.
-- Refer to [Orb Testing Methodologies]({{site.baseurl}}/2.0/testing-orbs/) for information on how to test orbs you have created.
+- Refer to [Orbs Concepts]({{site.baseurl}}/orb-concepts/) for high-level information about CircleCI orbs.
+- Refer to [Orbs FAQ]({{site.baseurl}}/orbs-faq/) for information on known issues and questions that have been addressed when using CircleCI orbs.
+- Refer to [Reusable Configuration Reference]({{site.baseurl}}/reusing-config/) for examples of reusable orbs, commands, parameters, and executors.
+- Refer to [Orb Testing Methodologies]({{site.baseurl}}/testing-orbs/) for information on how to test orbs you have created.
 
 ## Learn More
 {: #learn-more }
