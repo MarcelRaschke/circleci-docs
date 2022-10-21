@@ -5,10 +5,12 @@ short-title: "Sample config.yml File"
 description: "Sample config.yml File"
 categories: [migration]
 order: 2
-version:
-- Cloud
-- Server v3.x
-- Server v2.x
+contentTags: 
+  platform:
+  - Cloud
+  - Server v4.x
+  - Server v3.x
+  - Server v2.x
 suggested:
   - title: Using dynamic config
     link: https://circleci.com/blog/building-cicd-pipelines-using-dynamic-config/
@@ -24,7 +26,7 @@ suggested:
     link: https://circleci.com/blog/deploying-with-approvals/
 ---
 
-This document provides sample [`.circleci/config.yml`]({{ site.baseurl }}/2.0/configuration-reference/) files, as follows:
+This document provides sample [`.circleci/config.yml`]({{ site.baseurl }}/configuration-reference/) files, as follows:
 
 * TOC
 {:toc}
@@ -35,7 +37,7 @@ This document provides sample [`.circleci/config.yml`]({{ site.baseurl }}/2.0/co
 ### Concurrent workflow
 {: #concurrent-workflow }
 
-The configuration example below shows a concurrent  workflow in which the `build` and `test` jobs run at the same time. Refer to the [Workflows]({{ site.baseurl }}/2.0/workflows) document for complete details about orchestrating job runs with concurrent, sequential, and manual approval workflows.
+The configuration example below shows a concurrent  workflow in which the `build` and `test` jobs run at the same time. Refer to the [Workflows]({{ site.baseurl }}/workflows) document for complete details about orchestrating job runs with concurrent, sequential, and manual approval workflows.
 
 This image shows the workflow view for the following configuration example:
 ![Concurrent Workflow Graph]({{ site.baseurl }}/assets/img/docs/concurrent-workflow-map.png)
@@ -143,7 +145,7 @@ workflows:
 ### Sequential workflow
 {: #sequential-workflow }
 
-The configuration example below shows a sequential job workflow where the `build` job runs and then the `test` job runs once `build` has completed. Refer to the [Workflows]({{ site.baseurl }}/2.0/workflows) document for complete details about orchestrating job runs with concurrent, sequential, and manual approval workflows.
+The configuration example below shows a sequential job workflow where the `build` job runs and then the `test` job runs once `build` has completed. Refer to the [Workflows]({{ site.baseurl }}/workflows) document for complete details about orchestrating job runs with concurrent, sequential, and manual approval workflows.
 
 This image shows the workflow view for the following configuration example, in which jobs run sequentially; one after the other:
 ![Sequential Workflow Graph]({{ site.baseurl }}/assets/img/docs/sequential-workflow-map.png)
@@ -256,7 +258,7 @@ workflows:
 ### Approval job
 {: #approval-job }
 
-The example below shows a sequential job workflow with an approval step. The `build` job runs, then the `test` job, then a `hold` job, with `type: approval` ensures the workflow waits for manual approval before the `deploy` job can run. Refer to the [Workflows]({{ site.baseurl }}/2.0/workflows) document for complete details about orchestrating job runs with concurrent, sequential, and manual approval workflows.
+The example below shows a sequential job workflow with an approval step. The `build` job runs, then the `test` job, then a `hold` job, with `type: approval` ensures the workflow waits for manual approval before the `deploy` job can run. Refer to the [Workflows]({{ site.baseurl }}/workflows) document for complete details about orchestrating job runs with concurrent, sequential, and manual approval workflows.
 
 This image shows the workflow view for the following configuration example. This image has three parts to show the approval popup that appears when you click on a hold step in the app, and then the workflow view again once the `hold` job has been approved and the `deploy` job has run:
 
@@ -480,7 +482,7 @@ jobs:
             echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
             sudo apt update
             sudo apt install mongodb-org
-            mongo localhost --eval 'db.serverStatus()'
+            mongo localhost --eval "db.serverStatus()"
       - run:
           name: Test
           command: npm test
@@ -555,7 +557,7 @@ jobs:
             echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
             sudo apt update
             sudo apt install mongodb-org
-            mongo localhost --eval 'db.serverStatus()'
+            mongo localhost --eval "db.serverStatus()"
       - run:
           name: Test
           command: npm test
@@ -652,7 +654,7 @@ workflows:
 ```
 {% endraw %}
 
-This example shows a sequential workflow with the `test` job configured to run only on the main branch. Refer to the [Workflows]({{ site.baseurl }}/2.0/workflows) document for complete details about orchestrating job runs with concurrent, sequential, and manual approval workflows.
+This example shows a sequential workflow with the `test` job configured to run only on the main branch. Refer to the [Workflows]({{ site.baseurl }}/workflows) document for complete details about orchestrating job runs with concurrent, sequential, and manual approval workflows.
 
 ## Sample configuration with fan-in/fan-out workflow
 {: #sample-configuration-with-fan-infan-out-workflow }
@@ -735,7 +737,7 @@ jobs:
             - run:
                   name: Setup __BUILD_VERSION envvar
                   command: |
-                      echo "export __BUILD_VERSION=\"$(cat version.txt)\"" >> $BASH_ENV
+                      echo 'export __BUILD_VERSION="$(cat version.txt)"' >> "$BASH_ENV"
             - docker/check:
                   registry: $DOCKER_REGISTRY
             - docker/build:
@@ -775,7 +777,7 @@ jobs:
             - run:
                   name: Setup __BUILD_VERSION envvar
                   command: |
-                      echo "export __BUILD_VERSION=\"$(cat version.txt)\"" >> $BASH_ENV
+                      echo 'export __BUILD_VERSION="$(cat version.txt)"' >> "$BASH_ENV"
             - docker/check:
                   registry: $DOCKER_REGISTRY
             - docker/pull:
@@ -882,7 +884,7 @@ jobs:
             - run:
                   name: Setup __BUILD_VERSION envvar
                   command: |
-                      echo "export __BUILD_VERSION=\"$(cat version.txt)\"" >> $BASH_ENV
+                      echo 'export __BUILD_VERSION="$(cat version.txt)"' >> "$BASH_ENV"
             - docker/check:
                   registry: $DOCKER_REGISTRY
             - docker/build:
@@ -922,7 +924,7 @@ jobs:
             - run:
                   name: Setup __BUILD_VERSION envvar
                   command: |
-                      echo "export __BUILD_VERSION=\"$(cat version.txt)\"" >> $BASH_ENV
+                      echo 'export __BUILD_VERSION="$(cat version.txt)"' >> "$BASH_ENV"
             - docker/check:
                   registry: $DOCKER_REGISTRY
             - docker/pull:
@@ -1095,7 +1097,7 @@ workflows:
 ## Sample configuration with multiple executor types
 {: #sample-configuration-with-multiple-executor-types }
 
-It is possible to use multiple [executor types]({{site.baseurl}}/2.0/executor-intro/)
+It is possible to use multiple [executor types]({{site.baseurl}}/executor-intro/)
 in the same workflow.
 
 In `Example-1` each push will build and test the project on Linux, Windows and macOS.
@@ -1339,7 +1341,7 @@ jobs:
       - run:
           name: Compute version number
           command: |
-            echo "export IPERF3_BUILD_VERSION=\"<< pipeline.parameters.branch-name>>-${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:7}\"" | tee -a $BASH_ENV
+            echo 'export IPERF3_BUILD_VERSION="<< pipeline.parameters.branch-name>>-${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:7}"' | tee -a "$BASH_ENV"
       - github-release/release:
           tag: v$IPERF3_BUILD_VERSION
           title: $IPERF3_BUILD_VERSION
@@ -1438,6 +1440,6 @@ workflows:
 {: #see-also }
 {:.no_toc}
 
-* See the [Concepts document]({{ site.baseurl }}/2.0/concepts/#configuration) and [Workflows]({{ site.baseurl }}/2.0/workflows/) for more details of the concepts covered in this example.
-* See the [Configuration Reference]({{ site.baseurl }}/2.0/configuration-reference/) document for full details of each individual configuration key.
-* See the [Example Public Repos]({{ site.baseurl }}/2.0/example-configs/) document for a list of public projects that use CircleCI.
+* See the [Concepts document]({{ site.baseurl }}/concepts/#configuration) and [Workflows]({{ site.baseurl }}/workflows/) for more details of the concepts covered in this example.
+* See the [Configuration Reference]({{ site.baseurl }}/configuration-reference/) document for full details of each individual configuration key.
+* See the [Example Public Repos]({{ site.baseurl }}/example-configs/) document for a list of public projects that use CircleCI.

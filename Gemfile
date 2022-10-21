@@ -10,7 +10,7 @@ gem 'rake'
 gem 'dotenv'
 gem "kramdown-parser-gfm"
 gem "liquid-c"
-gem 'nokogiri', '~> 1.13', '>= 1.13.9'
+
 
 group :jekyll_plugins do
   gem 'jekyll-algolia', '~> 1.6', '>= 1.6.0'
@@ -18,7 +18,7 @@ group :jekyll_plugins do
   gem 'jekyll-include-cache'
   gem 'jekyll-target-blank'
   gem 'jekyll-toc'
-  gem 'jekyll-asciidoc'
+  gem 'jekyll-asciidoc', github: "asciidoctor/jekyll-asciidoc"
   gem 'jekyll-last-modified-at'
   gem 'jekyll-timeago'
   gem 'jekyll-redirect-from'

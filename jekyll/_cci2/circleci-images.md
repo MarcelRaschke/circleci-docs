@@ -1,28 +1,26 @@
 ---
 layout: classic-docs
-title: "Pre-Built CircleCI Docker Images"
-short-title: "Pre-Built CircleCI Docker Images"
-description: "Listing of available images maintained by CircleCI"
-categories: [containerization]
-order: 20
-version:
-- Cloud
-- Server v3.x
-- Server v2.x
+title: "Convenience images"
+description: "Listing of available Docker images maintained by CircleCI"
+contentTags: 
+  platform:
+  - Cloud
+  - Server v4.x
+  - Server v3.x
+  - Server v2.x
 ---
 
 
 **Legacy images with the prefix "circleci/" were [deprecated](https://discuss.circleci.com/t/legacy-convenience-image-deprecation/41034)** on December 31, 2021. For faster builds, upgrade your projects with [next-generation convenience images](https://circleci.com/blog/announcing-our-next-generation-convenience-images-smaller-faster-more-deterministic/).
 {: class="alert alert-warning"}
 
-This document provides information about pre-built CircleCI images (convenience images) and a listing by language, service type, and tags.
+This document provides information about convenience images (pre-built Docker images maintained by CircleCI) and a listing by language, service type, and tags.
 
 * TOC
 {:toc}
 
 ## Overview
 {: #overview }
-{:.no_toc}
 
 For convenience, CircleCI maintains several Docker images. These images are
 typically extensions of official Docker images, and include tools especially
@@ -43,9 +41,8 @@ Discuss](https://discuss.circleci.com/tags/convenience-images) to be notified in
 
 ### Examples
 {: #examples }
-{:.no_toc}
 
-Refer to the [Tutorials]({{ site.baseurl }}/2.0/tutorials/) for examples of using pre-built CircleCI Docker Images in a demo application.
+Refer to the [Examples and Guides Overview]({{ site.baseurl }}/examples-and-guides-overview/) for examples of using pre-built CircleCI Docker Images in a demo application.
 
 ## Next-generation convenience images
 {: #next-generation-convenience-images }
@@ -69,6 +66,9 @@ Using the `base` image in your config looks like the example shown below:
   myjob:
     docker:
       - image: cimg/base:2021.04
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
 ```
 
 This is a brand new Ubuntu-based image designed to install the bare minimum. The
@@ -89,6 +89,9 @@ The example below demonstrates how to use the next-gen Go image, which is based 
   myjob:
     docker:
       - image:  cimg/go:1.16
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
 ```
 
 This is a direct replacement for the legacy CircleCI Go image (`circleci/golang`). Note, the Docker Hub namespace is `cimg`. You can view other next generation images for other languages [below](#next-gen-language-images).
@@ -150,7 +153,6 @@ jobs:
 
 #### Finding an image id
 {: #finding-an-image-id }
-{:.no_toc}
 
 Follow these steps to find your docker image id:
 
@@ -166,28 +168,21 @@ cimg/python@sha256:bdabda041f88d40d194c65f6a9e2a2e69ac5632db8ece657b15269700b018
 ## Image types
 {: #image-types }
 
-CircleCI's convenience images fall into two categories: **language** images and
-**service** images. All images add a `circleci` user as a system user. The sections below will walk through the available next-generation and legacy images.
+CircleCI's convenience images fall into two categories: 
+* **language** images
+* **service** images 
+
+All images add a `circleci` user as a system user. The sections below walk through the available next-generation and legacy images.
 
 ### Next-gen language images
 {: #next-gen-language-images }
-{:.no_toc}
 
-Like the legacy images, the next-gen language images are convenience images for common programming languages.
-These images include both the same relevant language and [commonly-used tools](#pre-installed-tools).
-A language image should be listed first under the `docker` key in your configuration,
-making it the [primary container]({{ site.baseurl }}/2.0/glossary/#primary-container){:target="_blank"} during execution.
+Next-gen language images are convenience images for common programming languages.
+These images include relevant language tools and [commonly-used tools](#pre-installed-tools).
+To use a language image, list it first under the `docker` key in your configuration,
+making it the [primary container]({{ site.baseurl }}/glossary/#primary-container){:target="_blank"} during execution.
 
-CircleCI is developing next-gen images for the languages below.
-
-- [Elixir](https://circleci.com/developer/images/image/cimg/elixir)
-- [Go (Golang)](https://circleci.com/developer/images/image/cimg/go)
-- [Node.js](https://circleci.com/developer/images/image/cimg/node)
-- [OpenJDK (Java)](https://circleci.com/developer/images/image/cimg/openjdk)
-- [PHP](https://circleci.com/developer/images/image/cimg/php)
-- [Python](https://circleci.com/developer/images/image/cimg/python)
-- [Ruby](https://circleci.com/developer/images/image/cimg/ruby)
-- [Rust](https://circleci.com/developer/images/image/cimg/rust)
+See the [Developer Hub](https://circleci.com/developer/images?imageType=docker) for a full list of next-gen images.
 
 If your language is not listed, feel free to request an image on our [Ideas
 Board](https://ideas.circleci.com/). First, check to see if that "idea" is
@@ -195,11 +190,10 @@ already on CircleCI Ideas. If it is, up-vote it. If not, create it and set the
 category as "images". Finally, go and market your "idea" to friends, co-workers,
 forums, and other communities in order to help it build traction.
 
-If we see an idea on the board take off, we'll consider building it officially.
+If we see an idea on the board take off, we will consider building it officially.
 
 #### Next-gen language image variants
 {: #next-gen-language-image-variants }
-{:.no_toc}
 
 CircleCI maintains several variants for the next-gen language image. For
 next-gen images be sure to check each image listing for information on each
@@ -209,12 +203,11 @@ for details on which variants it supports.
 
 ### Legacy language images
 {: #legacy-language-images }
-{:.no_toc}
 
 The legacy language images are convenience images for common programming languages.
 These images include both the relevant language and [commonly-used tools](#pre-installed-tools).
 A language image should be listed first under the `docker` key in your configuration,
-making it the [primary container]({{ site.baseurl }}/2.0/glossary/#primary-container){:target="_blank"} during execution.
+making it the [primary container]({{ site.baseurl }}/glossary/#primary-container){:target="_blank"} during execution.
 
 CircleCI maintains legacy images for the languages below.
 
@@ -232,7 +225,6 @@ CircleCI maintains legacy images for the languages below.
 
 #### Language image variants
 {: #language-image-variants }
-{:.no_toc}
 
 CircleCI maintains several variants for language images. To use these variants,
 add one of the following suffixes to the end of an image tag.
@@ -246,7 +238,6 @@ the `circleci/golang:1.9-browsers` image.
 
 ### Next-Gen Service images
 {: #next-gen-service-images }
-{:.no_toc}
 
 Service images are convenience images for services like databases. These images should be listed **after** language images so they become secondary service containers.
 
@@ -257,7 +248,6 @@ Service images are convenience images for services like databases. These images 
 
 ### Legacy Service images
 {: #legacy-service-images }
-{:.no_toc}
 
 CircleCI maintains legacy images for the services below.
 
@@ -271,20 +261,12 @@ CircleCI maintains legacy images for the services below.
 
 #### Service image variant
 {: #service-image-variant }
-{:.no_toc}
 
 CircleCI maintains only one variant for service images. To speed up builds using
 RAM volume, add the `-ram` suffix to the end of a service image tag.
 
 For example, if you want the `circleci/postgres:9.5-postgis` image to use RAM
 volume, use the `circleci/postgres:9.5-postgis-ram` image.
-
-### Next-gen service images
-{: #next-gen-service-images }
-{:.no_toc}
-
-CircleCI is working on adding next-gen service convenience images.
-Checkout CircleCI's [Developer Hub](https://circleci.com/developer/images/) for the latest available service images.
 
 ## Pre-installed tools
 {: #pre-installed-tools }
@@ -318,7 +300,7 @@ or [Stretch](https://packages.debian.org/stretch/)-based images,
 however the next-gen images, `cimg`, extend the official [Ubuntu](https://packages.ubuntu.com) image.
 For details on the next-gen images, see the [Developer Hub](https://circleci.com/developer/images/). Each image is tracked in its own repository.
 
-The following packages are installed via `curl` or other means.
+The following packages are pre-installed in convenience images using `curl` or other means.
 
 - [Docker client](https://docs.docker.com/install/)
 - [Docker Compose](https://docs.docker.com/compose/overview/)
@@ -329,7 +311,7 @@ The following packages are installed via `curl` or other means.
 ## Out of scope
 {: #out-of-scope }
 
-1. If an image is not listed above, it is not available. As the Convenience Image
+1. If an image is not listed above, it is not available. As the convenience image
    program is revamped, proposals for new images are not currently being
    accepted.
 1. Old versions of software will not be rebuilt. Once an upstream image stops
@@ -338,7 +320,7 @@ The following packages are installed via `curl` or other means.
    example, will no longer be updated either.
 1. We do not support building preview, beta, or release candidate images tags. On
    occasion they will be available but these tags tend to cause our build system
-   for Convenience Images to fail. If you need a non-stable release of a
+   for convenience images to fail. If you need a non-stable release of a
    language, we suggest installing it via [an orb](https://circleci.com/orbs/)
    or a custom Docker image instead.
 
@@ -365,7 +347,6 @@ images!
 
 ### {{ image[1].name }}
 {: # {{image1name}} }
-{:.no_toc}
 
 **Resources:**
 
@@ -383,10 +364,9 @@ See [the tag list for circleci/{{ image[0] }} on Docker Hub](https://hub.docker.
 
 {% endfor %}
 
-## See also
-{: #see-also }
-{:.no_toc}
+## Next steps
+{: #next-steps }
 
-- See [Using Docker Authenticated Pulls]({{ site.baseurl }}/2.0/private-images/) for information about how to authorize your build to use an image in a private repository or in Amazon ECR.
-- For information about macOS images for iOS, see ({{ site.baseurl }}/2.0/testing-ios/).
-- See [Running Docker Commands]({{ site.baseurl }}/2.0/building-docker-images/) for information about how to build Docker images.
+- See [Using Docker Authenticated Pulls]({{ site.baseurl }}/private-images/) for information about how to authorize your build to use an image in a private repository or in Amazon ECR.
+- For information about macOS images for iOS, see ({{ site.baseurl }}/testing-ios/).
+- See [Running Docker Commands]({{ site.baseurl }}/building-docker-images/) for information about how to build Docker images.

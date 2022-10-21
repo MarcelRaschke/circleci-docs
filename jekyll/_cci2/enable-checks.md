@@ -5,8 +5,9 @@ short-title: "Enabling GitHub Checks"
 description: "How to enable GitHub Checks for CircleCI"
 categories: [getting-started]
 order: 1
-version:
-- Cloud
+contentTags: 
+  platform:
+  - Cloud
 ---
 
 This document describes how to enable the GitHub Checks feature and authorize CircleCI to report workflow status to the GitHub app. **The GitHub checks integration feature is not currently available on CircleCI server**.
@@ -41,7 +42,7 @@ To use the CircleCI Check integration, you first need to navigate to your **Orga
 {: #prerequisites }
 
 - You must be using the cloud-hosted version of CircleCI.
-- Your project must be using [Workflows]( {{ site.baseurl }}/2.0/workflows/).
+- Your project must be using [Workflows]( {{ site.baseurl }}/workflows/).
 - You must be an Admin on your GitHub repository to authorize installation of the CircleCI Checks integration.
 
 ### Steps

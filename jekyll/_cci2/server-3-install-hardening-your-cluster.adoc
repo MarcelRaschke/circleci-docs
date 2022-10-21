@@ -1,7 +1,8 @@
 ---
-version:
-- Server v3.x
-- Server Admin
+contentTags: 
+  platform:
+  - Server v3.x
+  - Server Admin
 ---
 = CircleCI Server v3.x Hardening Your Cluster
 :page-layout: classic-docs
@@ -209,6 +210,6 @@ You will only need the egress rules for internet access and SSH for your VCS.
 
 ifndef::pdf[]
 ## What to read next
-* https://circleci.com/docs/2.0/server-3-install-migration[Server 3.x Migration]
-* https://circleci.com/docs/2.0/server-3-operator-overview[Server 3.x Operations]
+* https://circleci.com/docs/server-3-install-migration[Server 3.x Migration]
+* https://circleci.com/docs/server-3-operator-overview[Server 3.x Operations]
 endif::[]

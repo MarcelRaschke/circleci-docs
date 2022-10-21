@@ -2,10 +2,12 @@
 layout: classic-docs
 title: ステータスバッジの追加
 description: CircleCI のステータスバッジを Web ページや Web ドキュメントに埋め込む方法
-version:
-  - クラウド
-  - Server v3.x
-  - Server v2.x
+contentTags:
+  platform:
+    - クラウド
+    - Server v4.x
+    - Server v3.x
+    - Server v2.x
 ---
 
 プロジェクトのビルドステータス (成功または失敗) を表示するバッジを README または他のドキュメントに作成する方法について説明します。
@@ -33,7 +35,7 @@ version:
 
 - `<PROJECT_NAME>`: プロジェクト名（ 例: `circleci-docs`）
 - `<ORG_NAME>` : そのプロジェクトの組織名またはユーザー名
-- `<VCS>`: VCS プロバイダー ("github" は `gh`、BitBucket は `bb` )
+- `<VCS>`: VCS プロバイダー ("github" は `gh`、Bitbucket は `bb` )
 - `<LINK>`: ステータスバッジをクリックしたら移動するリンク（パイプラインの概要のページなど）
 - オプション: API トークン（プライベートプロジェクト用のバッジの作成）
 
@@ -142,4 +144,4 @@ image:https://circleci.com/gh/circleci/circleci-docs/tree/teesloane-patch-5.svg?
 ## 設定ファイルの詳細
 {: #see-also }
 
-* [ステータス]({{site.baseurl}}/ja/2.0/status/)
+* [ステータス]({{site.baseurl}}/ja/status/)

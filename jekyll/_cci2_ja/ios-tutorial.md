@@ -6,20 +6,17 @@ categories:
   - プラットフォーム
 description: CircleCI 上での iOS アプリケーションの設定
 order: 20
-version:
-  - クラウド
+contentTags:
+  platform:
+    - クラウド
 ---
 
-以下のセクションに沿って、CircleCI を使用して iOS アプリケーション プロジェクトのビルド、テスト、デプロイを自動化する方法について説明していきます。
+このドキュメントでは CircleCI を使用して iOS アプリケーションプロジェクトのビルド、テスト、デプロイを自動化する方法について説明します。
 
-* 目次
-{:toc}
-
-**注:** [iOS のテスト]({{site.baseurl}}/ja/2.0/testing-ios/)や [macOS での入門ガイド]({{site.baseurl}}/ja/2.0/hello-world-macos/)も併せてご覧ください。
+**注:** [iOS のテスト]({{site.baseurl}}/ja/testing-ios/)や [macOS での入門ガイド]({{site.baseurl}}/ja/hello-world-macos/)も併せてご覧ください。
 
 ## 概要
 {: #overview }
-{:.no_toc}
 
 アプリケーションで `xcodebuild` を使用するジョブとステップを記述する方法、CircleCI 環境でコード署名とプロビジョニングプロファイルを設定する方法、および fastlane を使用してデプロイする方法について、順番に説明していきます。
 
@@ -27,7 +24,7 @@ version:
 {: #prerequisites }
 {:.no_toc}
 
-- CircleCI にプロジェクトを追加します。詳細については「[Hello World]({{site.baseurl}}/2.0/hello-world/)」を参照してください。
+- CircleCI にプロジェクトを追加します。詳細については「[Hello World]({{site.baseurl}}/ja/hello-world/)」を参照してください。
 - このチュートリアルは、対象のプロジェクト用の Xcode ワークスペースに少なくとも 1 つの共有スキームがあり、選択されたスキームにテスト アクションがあることを前提としています。 まだ共有スキームがない場合は、以下の手順に従って Xcode に共有スキームを追加してください。
 
 1. プロジェクトの Xcode ワークスペースを開きます。
@@ -55,14 +52,14 @@ jobs:
             SCAN_SCHEME: WebTests
 ```
 
-サポートされるバージョンの一覧は、iOS アプリのテストに関するドキュメントの「[サポートされている Xcode のバージョン]({{site.baseurl}}/ja/2.0/testing-ios/#supported-xcode-versions)」セクションで確認してください。
+サポートされるバージョンの一覧は、iOS アプリのテストに関するドキュメントの「[サポートされている Xcode のバージョン]({{site.baseurl}}/ja/using-macos/#supported-xcode-versions)」セクションで確認してください。
 
 ## コード署名と証明書
 {: #code-signing-and-certificates }
 
-詳細については「[iOS プロジェクトのコード署名の設定]({{site.baseurl}}/ja/2.0/ios-codesigning/)」を参照してください。
+詳細については「[iOS プロジェクトのコード署名の設定]({{site.baseurl}}/ja/ios-codesigning/)」を参照してください。
 
-カスタムツールを使用したり、ご自身のスクリプトを実行するためにビルドプロセスをさらにカスタマイズする場合は、`config.yml` ファイルを使用します。カスタマイズの詳細については [2.0 config.yml の設定例]({{ site.baseurl }}/ja/2.0/sample-config/)を参照してください。
+カスタムツールを使用したり、ご自身のスクリプトを実行するためにビルドプロセスをさらにカスタマイズする場合は、`config.yml` ファイルを使用します。カスタマイズの詳細については [2.0 config.yml の設定例]({{ site.baseurl }}/ja/sample-config/)を参照してください。
 
 ## 依存関係のインストール
 {: #installing-dependencies }
@@ -120,7 +117,7 @@ jobs:
 ## 高度な設定
 {: #advanced-configuration }
 
-iOS プロジェクトの高度な設定の詳細については、[macOS 上の iOS アプリケーションのテストに関するドキュメント](https://circleci.com/docs/ja/2.0/testing-ios/)を参照してください。
+iOS プロジェクトの高度な設定の詳細については、[macOS 上の iOS アプリケーションのテストに関するドキュメント]({{site.baseurl}}/ja/testing-ios/)を参照してください。
 
 ## GitHub 上のサンプルアプリケーション
 {: #example-application-on-github }

@@ -2,9 +2,11 @@
 layout: classic-docs
 title: インサイトデータの連携
 description: このドキュメントでは、 CircleCI のすべてのジョブで、サードパーティツールとの連携により分析データを追跡し、視覚化する方法について説明します。
-version:
-  - クラウド
-  - Server v3.x
+contentTags:
+  platform:
+    - クラウド
+    - Server v4.x
+    - Server v3.x
 ---
 
 ## 概要
@@ -12,7 +14,43 @@ version:
 
 {:toc}
 
-このドキュメントでは、インサイトのデータをサードパーティツールと連携させる方法について説明します。 CircleCI では現在、[Datadog](https://www.datadoghq.com/) と [Sumo Logic](https://www.sumologic.com/) との連携をサポートしています。
+このドキュメントでは、インサイトのデータをサードパーティツールと連携させる方法について説明します。 CircleCI では現在、[New Relic](https://newrelic.com/)、[Datadog](https://www.datadoghq.com/)、[Sumo Logic](https://www.sumologic.com/)との連携をサポートしています。
+
+## New Relic の連携
+
+[New Relic と CircleCI の連携](https://newrelic.com/instant-observability/circleci)により、New Relic のモニタリングスタックで CircleCI ジョブの分析データを見ることができます。
+
+以下の手順を実行して CircleCI Webhook をセットアップし、ログを New Relic に転送します。
+
+**手順 1.** [CircleCI](https://app.circleci.com/projects) にログインします。
+
+**手順 2.** いずれかの CircleCI プロジェクトに移動します。
+
+**手順 3.** **Project settings** をクリックします。
+
+**手順 4.**  Project Settings のサイドバーで **Webhooks** をクリックします。
+
+**手順 5.** **Add Webhook** をクリックします。
+
+**手順 6.** Webhook に名前をつけます。
+
+**手順 7.** New Relic の**ログエンドポイント**を入力します。
+
+US:
+
+`https://log-api.newrelic.com/log/v1?Api-Key=YOUR_LICENSE_KEY`
+
+EU:
+
+`https://log-api.eu.newrelic.com/log/v1?Api-Key=YOUR_LICENSE_KEY`
+
+New Relic のアカウント設定したリージョンを使用します。 `YOUR_LICENSE_KEY` を [UI または API から取得できる](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/#manage-license-key) New Relic ライセンスキーに置き換えます。
+
+**手順 8.** ログのプッシュをトリガーしたいイベントのタイプに応じて、**ワークフロー**または**ジョブ**のいずれかを選択します。
+
+**手順 9.** 受信 API またはサードパーティのサービスを設定している場合は、**est ping event** をクリックし、テストイベントを作成します。
+
+詳細については、New Relic と CircleCI の[インストールドキュメント](https://docs.newrelic.com/ja/docs/logs/forward-logs/circleci-logs/)を参照してください。
 
 ## Datadog との連携
 {: #datadog-integration }
@@ -47,7 +85,7 @@ Sumo Logic 用の CircleCI アプリでは、継続的インテグレーショ�
   - パフォーマンス、アクティビティ、ヘルスの状態をリアルタイムで監視および時間の経過に伴った追跡
   - 最適化の余地の特定
 
-![ヘッダー]({{ site.baseurl }}/assets/img/docs/Sumologic_Demo.png)
+![header]({{ site.baseurl }}/assets/img/docs/Sumologic_Demo.png)
 
 含まれているダッシュボードパネルを使用して、パイプラインに関するインサイトを得ることができます。 特定のプロジェクトまたはジョブの各パネルを、任意の期間フィルタリングします。 ダッシュボードパネルには以下が表示されます：
 
@@ -65,7 +103,7 @@ Sumo Logic 用の CircleCI アプリでは、継続的インテグレーショ�
 
 CircleCI ダッシュボードは、ダッシュボードのホームページからアプリケーション カタログを使用してインストールできます。
 
-![ヘッダー]({{ site.baseurl }}/assets/img/docs/sumologic_app_catalog.png)
+![header]({{ site.baseurl }}/assets/img/docs/sumologic_app_catalog.png)
 
 ダッシュボードは CircleCI Sumo Logic Orb を介してデータを受け取ります。 この Orb は、追跡するプロジェクトに含まれている必要があります。
 
@@ -90,7 +128,7 @@ CircleCI Webhook を送付する URL を取得し、コレクターに記録す�
 ##### **ステップ 3:  プロジェクトの Webhook を設定します。**
 {: #step-3-configure-project-webhooks }
 
-トラックするプロジェクト毎に、Webhook が先述の HTTP ソースアドレスに送信されるように設定します。 [Webhook の設定に関するドキュメント]({{ site.baseurl }}/2.0/webhooks/#setting-up-a-hook)に従ってください。
+トラックするプロジェクト毎に、Webhook が先述の HTTP ソースアドレスに送信されるように設定します。 [Webhook の設定に関するドキュメント]({{ site.baseurl }}/ja/webhooks/#setting-up-a-hook)に従ってください。
 
 Webhook を設定する際は、必ず「workflow-completed」イベントと「job-completed」イベントの両方を含めてください。
 
